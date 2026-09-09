@@ -56,10 +56,16 @@ add_executable(i26
     pwm.cpp
     radio.cpp
     control.cpp
+    modules/tof/tof_bridge.cpp
+    modules/tof/tof_vl53l1x.cpp
+    third_party/ST_VL53L1X/VL53L1X_api.c
+    third_party/ST_VL53L1X/vl53l1_platform.c
 )
 
 target_include_directories(i26 PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/modules/tof"
+    "${CMAKE_CURRENT_SOURCE_DIR}/third_party/ST_VL53L1X"
     "${EIGEN3_INCLUDE_DIR}"
 )
 
@@ -67,6 +73,7 @@ target_link_libraries(i26 PRIVATE
     hardware_spi
     hardware_pwm
     hardware_uart
+    hardware_i2c
     pico_stdlib
     pico_multicore
 )
