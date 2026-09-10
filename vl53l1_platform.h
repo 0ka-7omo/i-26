@@ -21,10 +21,12 @@
 
 #define I2C_TIME_OUT_BASE   10
 #define I2C_TIME_OUT_BYTE   1
-#define TOF_I2C_PORT i2c1
-#define TOF_I2C_CLOCK_HZ (400 * 1000)
-#define TOF_SDA_GPIO 26
-#define TOF_SCL_GPIO 27
+#define I2C_PORT i2c1
+#define I2C_ADDRESS 0x0001
+#define i2C_CLOCK (400*1000)
+#define NORMAL_WAIT 500
+#define SDA_PIN 26  // GP27 = Pin.31 = SDA
+#define SCL_PIN 27  // GP26 = Pin.32 = SCL
 
 
 #ifdef __cplusplus
@@ -38,10 +40,10 @@ typedef struct {
 
 typedef int8_t VL53L1X_ERROR;
 typedef int8_t VL53L1_Error;
-typedef unsigned char byte;
 
 typedef VL53L1_Dev_t *VL53L1_DEV;
-
+typedef unsigned char byte;
+// uint8_t r_gbuf[16];
 /** @brief VL53L1_WriteMulti() definition.\n
  * To be implemented by the developer
  */
@@ -107,8 +109,8 @@ int8_t VL53L1_WaitMs(
 		uint16_t dev,
 		int32_t       wait_ms);
 
-uint16_t makeuint16(int lsb,int msb);	
-void read_block_data_at(uint16_t dev,byte reg,int sz,uint8_t (*gbuf)[16]);
+// uint16_t makeuint16(int lsb,int msb);
+// void read_block_data_at(uint16_t dev,byte reg,int sz,uint8_t (*gbuf)[16]);
 
 #ifdef __cplusplus
 }

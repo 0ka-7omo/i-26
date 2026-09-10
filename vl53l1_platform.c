@@ -67,6 +67,7 @@
 // #endif
 
 uint8_t _I2CBuffer[256];
+// uint8_t gbuf[16];
 
 void VL53L1_GetI2cBus(void){};
 void VL53L1_PutI2cBus(void){};
@@ -76,14 +77,13 @@ int _I2CWrite(uint16_t Dev, uint8_t *pdata, uint32_t count, bool nostop) {
     // int i2c_time_out = I2C_TIME_OUT_BASE+ count* I2C_TIME_OUT_BYTE;
     // int i2c_time_out = 600;
 
-    status = i2c_write_timeout_us(TOF_I2C_PORT,Dev,pdata,count,nostop,600); 
-    //status = i2c_write_blocking(I2C_PORT, &pdata, &count, false,600);
+    status = i2c_write_timeout_us(I2C_PORT,Dev,pdata,count,nostop,600); 
     //printf("status for write(before if) : %d\n" , status);
     if(status == (int)count){
         status = 0;
     };
     //printf("status for write(after if) : %d\n" , status);
-    //sleep_ms(2);
+    // sleep_ms(2);
     return status;
 }
 
@@ -91,8 +91,7 @@ int _I2CRead(uint16_t Dev, uint8_t *pdata, uint32_t count) {
     int status;
     // int i2c_time_out = I2C_TIME_OUT_BASE+ count* I2C_TIME_OUT_BYTE;
 
-    status = i2c_read_timeout_us(TOF_I2C_PORT,Dev,pdata,count,false,600);
-    //status = i2c_read_blocking(I2C_PORT, Dev, pdata, count, false);
+    status = i2c_read_timeout_us(I2C_PORT,Dev,pdata,count,false,600);
     // printf("%d pdata" , pdata);
     if(status == (int)count){
         status = 0;
@@ -279,6 +278,23 @@ done:
     return Status;
 }
 
+// uint16_t makeuint16(int lsb, int msb) {
+//     return ((msb & 0xFF) << 8) | (lsb & 0xFF);
+// }
+
+// void read_block_data_at(uint16_t dev,uint8_t reg, int sz,uint8_t (*gbuf)[16]) {
+//     int i = 0;
+//     //write_byte_data(reg);
+//     // VL53L1_WrByte(dev,reg,VL53L1X_address);
+//     _I2CWrite(dev,reg,sizeof(reg));
+//     //Wire.requestFrom(VL53L0X_address, sz);
+//     _I2CRead(dev,&gbuf,sz);
+//     // for (i = 0; i < sz; i++) {
+//     //     while (Wire.available() < 1) delay(1);
+//     //     gbuf[i] = Wire.read();
+//     // }
+// }
+
 VL53L1_Error VL53L1_GetTickCount(
 	uint32_t *ptick_count_ms)
 {
@@ -342,14 +358,12 @@ VL53L1_Error VL53L1_GetTimerFrequency(int32_t *ptimer_freq_hz)
 
 VL53L1_Error VL53L1_WaitMs(uint16_t dev, int32_t wait_ms){
 	(void)dev;
-	(void)wait_ms;
 	// HAL_Delay(wait_ms);
     return VL53L1_ERROR_NONE;
 }
 
 VL53L1_Error VL53L1_WaitUs(uint16_t dev, int32_t wait_us){
 	(void)dev;
-	(void)wait_us;
 	// HAL_Delay(wait_us/1000);
     return VL53L1_ERROR_NONE;
 }
