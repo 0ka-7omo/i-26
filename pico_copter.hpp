@@ -11,7 +11,6 @@
 #include "pwm.hpp"
 #include "radio.hpp"
 #include "control.hpp"
-#include "modules/tof/tof_bridge.hpp"
 #include <math.h>
 
 #define LED_PIN 25
