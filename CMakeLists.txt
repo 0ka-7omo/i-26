@@ -58,6 +58,8 @@ add_executable(i26
     control.cpp
     VL53L1X_api.c
     vl53l1_platform.c
+    rgbled.cpp
+    WS2812.cpp
 )
 
 target_include_directories(i26 PRIVATE
@@ -70,6 +72,7 @@ target_link_libraries(i26 PRIVATE
     hardware_pwm
     hardware_uart
     hardware_i2c
+    hardware_pio
     pico_stdlib
     pico_multicore
 )
@@ -77,3 +80,6 @@ target_link_libraries(i26 PRIVATE
 pico_enable_stdio_usb(i26 1)
 pico_enable_stdio_uart(i26 0)
 pico_add_extra_outputs(i26)
+pico_generate_pio_header(i26
+    ${CMAKE_CURRENT_LIST_DIR}/WS2812.pio
+)

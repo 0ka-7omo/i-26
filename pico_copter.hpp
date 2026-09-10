@@ -11,6 +11,7 @@
 #include "pwm.hpp"
 #include "radio.hpp"
 #include "control.hpp"
+#include "rgbled.hpp"
 #include <math.h>
 
 #define LED_PIN 25
