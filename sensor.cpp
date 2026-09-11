@@ -212,7 +212,7 @@ bool initialize_Altitude(void)
   return true;
 }
 
-void get_Altitude(void)
+bool get_Altitude(void)
 {
   // while(isDataReady==0)
   // {
@@ -222,30 +222,31 @@ void get_Altitude(void)
   Status = VL53L1X_CheckForDataReady(dev, &isDataReady);
   if(Status != 0)
   {
-    return;
+    return false;
   }
   if(isDataReady == 0)
   {
-    return;
+    return false;
   }
 
   isDataReady =0;
   Status = VL53L1X_GetRangeStatus(dev,&rangeStatus);
   if(Status != 0)
   {
-    return;
+    return false;
   }
   Status = VL53L1X_GetDistance(dev,&distance);
   if(Status != 0)
   {
-    return;
+    return false;
   }
   Status = VL53L1X_ClearInterrupt(dev);
   if(Status != 0)
   {
-    return;
+    return false;
   }
   //printf("%9.6f %4d\n",(current_time-start_time)/1000000.0,distance);
+  return true;
 }
 
 

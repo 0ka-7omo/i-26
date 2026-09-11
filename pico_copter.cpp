@@ -55,7 +55,11 @@ int main(void)
     // ToFセンサから値を取得
     if (altitude_available)
     {
-      get_Altitude();
+      if (get_Altitude())
+      {
+        lotate_altitude_init(Theta,Psi,Phi);
+        lotated_distance = lotate_altitude(distance);
+      }
     }
 
     //printf("Arm_flag:%d LockMode:%d\n",Arm_flag, LockMode);

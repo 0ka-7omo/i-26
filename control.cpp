@@ -45,12 +45,20 @@ Matrix<float, 6, 6> R;// = MatrixXf::Identity(6, 6)*0.0001;
 Matrix<float, 7 ,6> G;
 Matrix<float, 3 ,1> Beta;
 
+Matrix<float, 3 ,3> lotate_mat = MatrixXf::Zero(3,3);
+float f_distance = 0;
+float f_distance2 = 0;
+float f_distance3 = 0;
+float lotated_distance = 0;
+Matrix<float, 1 ,3> distance_mat = MatrixXf::Zero(1,3);
+Matrix<float, 1 ,3> f_distance_mat = MatrixXf::Zero(1,3);
+
 //Log
 uint16_t LogdataCounter=0;
 uint8_t Logflag=0;
 volatile uint8_t Logoutputflag=0;
 float Log_time=0.0;
-const uint8_t DATANUM=38; //Log Data Number
+const uint8_t DATANUM=43; //Log Data Number
 const uint32_t LOGDATANUM=48000;
 float Logdata[LOGDATANUM]={0.0};
 
@@ -370,6 +378,30 @@ void motor_stop(void)
   set_duty_rl(0.0);
 }
 
+void lotate_altitude_init(float Theta,float Psi,float Phi){
+  lotate_mat(0,0) = cos(Theta)*cos(Psi);
+  lotate_mat(0,1) = cos(Theta)*sin(Psi);
+  lotate_mat(0,2) = -sin(Theta);
+  lotate_mat(1,0) = (sin(Phi)*sin(Theta)*cos(Psi))-(cos(Phi)*sin(Psi));
+  lotate_mat(1,1) = (sin(Phi)*sin(Theta)*sin(Psi)) + (cos(Phi) * cos(Psi));
+  lotate_mat(1,2) = sin(Phi)*cos(Theta);
+  lotate_mat(2,0) = (cos(Phi)*sin(Theta)*cos(Psi)) + (sin(Phi)*sin(Psi));
+  lotate_mat(2,1) = (cos(Phi)*sin(Theta)*sin(Psi)) - (sin(Phi)*cos(Psi));
+  lotate_mat(2,2) = cos(Phi)*cos(Theta);
+}
+
+float lotate_altitude(float l_distance){
+  // distance_mat(0,0) = 0;
+  // distance_mat(0,1) = 0;
+  distance_mat(0,2) = l_distance;
+  f_distance_mat =  distance_mat * lotate_mat;
+  f_distance = f_distance_mat(0,0);
+  f_distance2 = f_distance_mat(0,1);
+  f_distance3 = f_distance_mat(0,2);
+
+  return f_distance3;
+}
+
 void rate_control(void)
 {
   float p_rate, q_rate, r_rate;
@@ -598,6 +630,11 @@ void logging(void)
       Logdata[LogdataCounter++]=Rbias;                    //36
       Logdata[LogdataCounter++]=T_ref;                    //37
       Logdata[LogdataCounter++]=Acc_norm;                 //38
+      Logdata[LogdataCounter++]=distance;                 //39
+      Logdata[LogdataCounter++]=lotated_distance;         //40
+      Logdata[LogdataCounter++]=Phi;                      //41
+      Logdata[LogdataCounter++]=Theta;                    //42
+      Logdata[LogdataCounter++]=rangeStatus;              //43
 
    
     }

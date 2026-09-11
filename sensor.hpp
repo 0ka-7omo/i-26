@@ -37,7 +37,7 @@ extern float magnetic_field_mgauss[3];
 void imu_mag_init(void);
 void imu_mag_data_read(void);
 bool initialize_Altitude(void);
-void get_Altitude(void);
+bool get_Altitude(void);
 
 extern int8_t Status;
 extern int16_t OffsetValue;
